@@ -1,15 +1,18 @@
 package main
 
 import (
-	"net/http"
+	"log"
 
-	"github.com/go-chi/chi"
+	"github.com/M-2001/GoRestAPI/database"
 )
 
 func main() {
-	r := chi.NewRouter()
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("welcome"))
-	})
-	http.ListenAndServe(":3000", r)
+
+	databaseConnection := database.ConnectDB()
+
+	if databaseConnection == nil {
+		defer databaseConnection.Close()
+		log.Fatal("Error al establecer conexion con la base de datos")
+		return
+	}
 }
